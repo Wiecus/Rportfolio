@@ -1,0 +1,88 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# Zadanie 1. Napisz funkcję iloraz(), która ma dwa argumenty x i y. Funkcja ta
+# powinna obliczyć iloraz x/y.
+
+iloraz <- function(x,y){
+  ilo <- x/y
+  paste('Iloraz wynosi: ',ilo)
+}
+iloraz(100,2654)
+```
+
+```{r}
+# Zadanie 3. Napisz funkcję potega() obliczającą x podniesione do potęgi y, tj. x
+# y
+potega <- function(x,y){
+  pot <- x^y
+  paste(x,'do potegi',y, 'wynosi',pot)
+}
+potega(2,4)
+```
+
+```{r}
+# Zadanie 17. Napisz funkcję temp(), która dokonuje zamiany temperatury w stopniach Celsjusza na Fahrenheita i Kelvina
+temp <- function(x){
+  kelvin <- x+273.15
+  fahrenheit <- 9/5*x+32
+  t <- as.matrix(c(x,kelvin,fahrenheit),3,1)
+  rownames(t) <- c('Celsjusz','Kelvin','Fahrenheit')
+  colnames(t) <- c('Temperatura')
+  return(t)
+}
+temp(20)
+temp(0)
+```
+
+
+```{r}
+# Zadanie 16. Napisz funkcję bmi(), która oblicza bmi dla danej osoby. Dwa parametry tej funkcji to waga (w kg) i wzrost (w cm).
+bmi <- function(x,y){
+  if(class(x) != 'numeric') stop('podaj liczbe')
+  if(class(y) != 'numeric') stop('podaj liczbe')
+  if(x < 0 | x > 615) stop('Ty chyba zwierze jestes')
+  if(y < 0 | y > 270) stop('Jestes King kong')
+  y = y/100
+  b <- x/(y^2)
+  paste('Przy wzroscie',y,'i wadze',x,'bmi wynosi',b)
+  if(b < 15 | b >30) stop('Kazdy maly kazdy duzy moze swietym byc')
+}
+bmi(64,184)
+```
+
+```{r}
+# Zadanie 19. Napisz funkcję, która dla zadanego promienia r i wysokości h walca
+# wyznacza jego objętość, pole podstawy oraz pole powierzchni całkowitej.
+walec <- function(r,h){
+  objetosc <- pi*r^2*h
+  pole_podstawy <- pi*r^2
+  pole_calkowite <- 2*pi*r^2+2*pi*r*h
+  paste(objetosc,pole_podstawy,pole_calkowite)
+}
+walec(3,5)
+```
+
+
+
+```{r}
+# . Napisz funkcję pierwiastek(), która oblicza pierwiastki dla dowolnego
+# równania kwadratowego.
+pierwiastek <- function(a,b,c){
+  if(class(a) != 'numeric') stop('a musi byc liczba')
+  if(class(b) != 'numeric') stop('a musi byc liczba')
+  if(class(c) != 'numeric') stop('a musi byc liczba')
+  if(a==0) stop('a musi byc rozne od zera')
+  delta <- b^2 - 4*a*c
+  if(delta<0) stop('Nie ma pierwiastkow')
+  if(delta==0) warning('Jest jeden pierwiastek podwojny')
+  if(delta>0) warning('Sa dwa rozne pierwiastki')
+  x1 <- (-b-sqrt(delta))/(2*a)
+  x2 <- (-b+sqrt(delta))/(2*a)
+  c(x1,x2)
+}
+pierwiastek(1,5,4)
+```
