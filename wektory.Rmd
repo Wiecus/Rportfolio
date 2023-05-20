@@ -1,0 +1,89 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#Zadanie 1. Stwórz wektor złożony z następujących liczb: 2, 6, 8, 6, 4, 3
+c(2,6,8,6,4,3)
+```
+```{r}
+#Stwórz wektor złożony z kolejnych liczb naturalnych od 1 do 100
+c(1:100)
+```
+```{r}
+#Zadanie 5. Stwórz wektor złożony z kolejnych nazw miesięcy w języku angielskim
+
+
+month.name
+```
+```{r}
+LETTERS
+```
+
+```{r}
+# Zadanie 7. Wygeneruj wektor kolejnych liczb parzystych 2, 4,..., 20. W wektorze
+# tym nie powinno być liczb 6 oraz 10. Innymi słowy wygeneruj wektor 2, 4, 8, 12, 14,
+# 16, 18, 20.
+seq(2,20,2)[c(-3,-5)]
+```
+
+```{r}
+month.name[c(4,5,6,10,11,12)]
+```
+
+```{r}
+#Zadanie 17. Utwórz wektor zawierający Twoje imię 100 razy
+rep("Kuba",100)
+```
+
+```{r}
+#Zadanie 16. Utwórz wektor postaci: 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3.
+rep(c(1,2,3),5)
+```
+
+```{r}
+#Zadanie 19. Utwórz wektor zawierający jedną jedynkę, dwie dwójki,..., dziewięć
+#dziewiątek.
+c(1,2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9)
+rep(c(1:9),c(1:9))
+```
+```{r}
+# Zadanie 11. Zapisz w postaci wektora wiek kolejnych 10 osób: 25, 35, 43, 28, 47, 77,
+# 55, 66, 25, 25. Dla tak stworzonego wektora oblicz następujące statystyki opisowe:
+# minimum, maksimum, średnia, odchylenie standardowe, rozstęp, kwartyle, kurtoza,
+# współczynnik skośności (asymetrii).
+
+#ctrl shift enter cala wstawka
+#ctrl enter linijka z kursorem
+wiek<-c(25,35,43,28,47,77,55,66,25,25)
+min(wiek)
+max(wiek)
+mean(wiek)
+sd(wiek)
+median(wiek)
+quantile(wiek)
+max(wiek)-min(wiek)
+```
+```{r}
+# Zadanie 12. Wygeneruj w R 1000 liczb z rozkładu normalnego dla zmiennej losowej
+# X opisującej wzrost dorosłych osób (średnia 176 cm i odchylenie standardowe 9 cm).
+# Dla tak utworzonego wektora oblicz następujące statystyki opisowe: minimum, maksimum, średnia, odchylenie standardowe, rozstęp, kwartyle, kurtoza, współczynnik
+# skośności (asymetrii). Stwórz histogram wzrostu.
+wzrost <- rnorm(1000,mean = 176, sd = 9)
+min(wzrost)
+max(wzrost)
+mean(wzrost)
+sd(wzrost)
+max(wzrost)-min(wzrost)
+quantile(wzrost)
+hist(wzrost, col = "yellow")
+```
+
+```{r}
+#Praca domowa 18,21
+```
+```{r}
+#Zadanie 18. Wygeneruj wektor 20 liczb w równych odstępach między 1 a 100.
+seq(2,100,5)
+```

@@ -1,0 +1,113 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+```
+```{r}
+#import plikow
+dane <- read_xlsx('dane/gospodarstwa.xlsx', sheet = 1)
+zmienne <- read_xlsx('dane/gospodarstwa.xlsx', sheet = 2, range = 'A2:B18')
+etykiety <- read_xlsx('dane/gospodarstwa.xlsx', sheet = 3, range = 'A2:C70')
+```
+```{r}
+#Zadanie 2. Utwórz zbiór, w którym są gospodarstwa ze wsi
+
+zad2 <- dane[dane$klm==6,]
+```
+```{r}
+# Zadanie 3. Utwórz zbiór, w którym są gospodarstwa o dochodach > 2000 zł.
+zad3 <- dane[dane$dochg>2000,]
+```
+```{r}
+# Zadanie 4. Utwórz zbiór, który zawiera gospodarstwa z województwa wielkopolskiego oraz które zamieszkują wieś i mają dochody powyżej 3000 zł.
+zad4 <- dane[dane$woj=='30' & dane$klm==6 & dane$dochg>3000,] 
+```
+```{r}
+#Zadanie 10. Wybierz wszystkie gospodarstwa, których dochód jest z przedziału
+#3000–4000 i zostaw tylko tą zmienną w zbiorze.
+zad10 <- dane$dochg[between(dane$dochg,3000,4000)]
+
+```
+```{r}
+library(dplyr)
+```
+
+```{r}
+# Zadanie 5. Wybierz gospodarstwa domowe z województwa dolnośląskiego i mazowieckiego z miast powyżej 500 tys. mieszkańców.
+
+zad5a <- dane[dane$woj=='02' & dane$klm==1 | dane$woj=='14' & dane$klm==1,]
+
+zad5b <- dane[dane$klm==1 & dane$woj %in% c('02','14'),]
+```
+```{r}
+# Zadanie 9. Wybierz gospodarstwa domowe z danymi tylko dla kolumny woj i wydg
+# ale w odniesieniu jedynie dla gospodarstw z województwa wielkopolskiego.
+
+zad9 <- dane[dane$woj=='30', c('woj','wydg')]
+dim(dane)
+```
+```{r}
+# Zadanie 10. Wybierz wszystkie gospodarstwa, których dochód jest z przedziału
+# 3000–4000 i zostaw tylko tą zmienną w zbiorze
+
+zad10 <- dane[dane$dochg >= 3000 & dane$dochg <= 4000, 'dochg']
+```
+```{r}
+# Zadanie 17. Oblicz ile było gospodarstw domowych ze względu na poszczególne
+# warianty zmiennej klm.
+
+tabela <- table(dane$klm)
+rownames(tabela) <- etykiety$Etykieta[1:6]
+print(tabela)
+```
+```{r}
+# Zadanie 18. Oblicz ile było gospodarstw domowych w poszczególnych województwach.
+
+tabela1 <- as.matrix(table(dane$woj))
+rownames(tabela1) <- etykiety$Etykieta[7:22]
+colnames(tabela1) <- 'N'
+print(tabela1)
+```
+```{r}
+# Zadanie 19. Oblicz ile było gospodarstw domowych w poszczególnych województwach ze względu na warianty zmiennej d61 (Sytuacja materialna gospodarstwa).
+
+tabela2 <- table(dane$woj,dane$d61)
+rownames(tabela2) <- etykiety$Etykieta[7:22]
+colnames(tabela2) <- etykiety$Etykieta[58:62]
+print(tabela2)
+```
+```{r}
+# Zadanie 20. Oblicz średnie wydatki wszystkich gospodarstw domowych
+
+mean(dane$wydg,na.rm = TRUE)
+summary(dane$wydg)
+```
+
+```{r}
+# Zadanie 23. Oblicz średnie wydatki w ramach klasy miejscowości.
+
+by(dane$wydg, dane$klm, mean, na.rm = TRUE)
+by(dane$wydg, dane$klm, summary)
+```
+```{r}
+# Zadanie 24. Stwórz wykres słupkowy z liczebnościami dla klasy miejscowości.
+
+tabela_klm <- table(dane$klm)
+barplot(tabela_klm, col='yellow', xlab='Klasa miejscowosci', ylab='Liczba gospodarstw', main='Liczba gospodarstw w przekroju klm',names.arg=etykiety$Etykieta[1:6])
+```
+```{r}
+## praca domowa zad zrob wykres slupkowy dla wojewodztw 
+tabela_woj <- table(dane$woj)
+barplot(tabela_woj, col='red', xlab='Numer województwa', ylab='Liczba gospodarstw', main='Liczba gospodarstw w przekroju woj', names.arg=etykiety$column2[7:22])
+
+```
+```{r}
+## wybierz gospodarstwa ktore maja powierzchnie od 100 do 150 z woj mazowieckiego zostaw 4 kolumny d36, woj, wydg, dochg
+
+zad_dom <- dane[(dane$d36>=100 & dane$d36<=150) & dane$woj == '30',]
+subset(zad_dom, select=c(d36,woj,dochg,wydg))
+
+```

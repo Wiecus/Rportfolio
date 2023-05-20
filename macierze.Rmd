@@ -1,0 +1,134 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(expm)
+```
+
+```{r}
+# Zadanie 1. Zadeklaruj w programie R następujące macierze:
+
+A <- matrix(c(1,2,-1,0,3,-2,4,5,2,6,5,-3,0,1,5,-4),nrow = 4, ncol = 4, byrow = TRUE)
+print(A)
+
+B <- matrix(c(3,4,2,1,6,0,-1,1),nrow = 4, ncol = 2, byrow = FALSE)
+print(B)
+
+wyzA <- det(A)
+print(wyzA)
+
+iloAB <- A%*%B
+print(iloAB)
+
+tranB <- t(B)
+print(tranB)
+
+OdwrA <- solve(A)
+print(OdwrA)
+
+A3 <- A%*%A%*%A
+print(A3)
+
+A3_inaczej <- A%^%3
+print(A3_inaczej)
+
+```
+
+```{r}
+# Zadanie 2. Zadeklaruj w programie R następujące macierze:
+
+A <- matrix(c(3,1,-2,-3,2,1,-2,6,3),nrow = 3, ncol = 3, byrow = TRUE)
+print(A)
+B <- matrix(c(1,2,-2,0,2,-1), nrow = 2, ncol = 3, byrow = TRUE)
+print(B)
+C <- matrix(c(1:4), nrow = 2, ncol = 2, byrow = TRUE)
+print(C)
+
+wyzA <- det(A)
+print(wyzA)
+wyzC <- det(C)
+print(wyzC)
+
+iloABT <- A%*%t(B)
+print(iloABT)
+
+tranC <- t(C)
+print(C)
+
+odwrC <- solve(C)
+print(odwrC)
+
+iloA1BTC2 <- solve(A)%*%t(B)%*%C%*%C
+print(iloA1BTC2)
+
+```
+
+```{r}
+# Zadanie 5. W programie R na 3 różne sposoby zadeklaruj macierz postaci:
+
+sposob1 <- matrix(c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), nrow = 5, ncol = 4, byrow = TRUE)
+print(sposob1)
+
+sposob2 <- matrix(rep(0,times=20), nrow = 5, ncol = 4, byrow = TRUE)
+print(sposob2)
+
+sposob3 <- matrix(0,5,4)
+print(sposob3)
+
+w1 <- w2 <- w3 <- w4 <- w5 <- c(0,0,0,0)
+sposob4 <- rbind(w1,w2,w3,w4,w5)
+print(sposob4)
+
+k1 <- k2 <- k3 <- k4 <- c(0,0,0,0,0)
+sposob5 <- cbind(k1,k2,k3,k4)
+print(sposob5)
+```
+```{r}
+# Zadanie 6. W programie R na 3 różne sposoby zadeklaruj macierz postaci:
+
+A <- matrix(c(1:9), nrow = 3, ncol = 3, byrow = TRUE)
+print(A)
+
+lw <- nrow(A)
+print(lw)
+lk <- ncol(A)
+print(lk)
+
+sumakol <- colSums(A)
+print(sumakol)
+
+sumawier <- rowSums(A)
+print(sumawier)
+
+sredniakol <- colMeans(A)
+print(sredniakol)
+
+sumaA11iA32 <- A[1,1]+A[3,2]
+print(sumaA11iA32)
+
+kol2 <- A[,2]
+print(kol2)
+
+wiersz1 <- A[1,]
+print(wiersz1)
+
+
+```
+
+```{r}
+# Zadanie 8. W celu zbadania zależności między wydajnością pracy (w sztukach na
+# godzinę) i stażem pracy pracowników (w latach) pewnego zakładu przemysłowego
+# wylosowano próbę 10 pracowników i otrzymano dla nich następujące dane:
+n <- 10
+staz <- matrix(c(1:10),n,1)
+print(staz)
+wydajnosc <- matrix(c(10, 15, 13, 22, 23, 20, 18, 25, 27, 22),n,1)
+print(wydajnosc)
+y <- wydajnosc
+X <- cbind(staz,1)
+print(X)
+a <- solve(t(X)%*%X)%*%t(X)%*%y
+print(a)
+```

@@ -1,0 +1,144 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#Ładowanie pakietów
+library(readxl)
+library(dplyr)
+library(stats)
+library(xtable)
+library(ggplot2)
+library(ggpubr)
+library(ggExtra)
+library(sf)
+library(tmap)
+library(tmaptools)
+```
+
+```{r}
+#Import plików
+dane <- read_xlsx("dane/gospodarstwa.xlsx", sheet = 1)
+zmienne <- read_xlsx("dane/gospodarstwa.xlsx", sheet = 2, range='A2:B18')
+etykiety <- read_xlsx("dane/gospodarstwa.xlsx", sheet = 3, range='A2:C70') %>%
+            rename(kod='...2',wartosc=Wartość)
+```
+
+```{r}
+#Zadanie 2. Stwórz korelacyjny diagram rozrzutu dla zmiennej dochg i wydg. Weź
+# pod uwagę tylko gospodarstwa o dodatnich dochodach i wydatkach.
+
+ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_dark()
+```
+
+```{r}
+# Zadanie 3. Diagram rozrzutu utworzony w zadaniu 2 przedstaw na różny sposób
+# używając w tym celu wbudowanych w pakiecie ggplot2 stylów tematycznych.
+
+plot1 <- ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_dark()
+
+plot2 <- ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_classic()
+
+plot3 <- ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_get()
+
+print(plot3)
+ggarrange(plot1,plot2,plot3,nrow=2,ncol=2)
+
+```
+
+```{r}
+# Zadanie 4. Stwórz korelacyjny diagram rozrzutu między dochodami a wydatkami
+# w ramach każdej z klas miejscowości.
+
+dane$klasa <- factor(dane$klm,levels = etykiety$kod[1:6],labels=etykiety$Etykieta[1:6])
+
+ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_get() + facet_wrap(~klasa)
+```
+
+```{r}
+dane$wojewodztwo <- factor(dane$woj,levels = etykiety$kod[7:22],labels=etykiety$Etykieta[7:22])
+ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami') + theme_get() + facet_wrap(~wojewodztwo)
+```
+
+```{r}
+# Zadanie 5. Stwórz wykres typu box-plot dla zmiennej d36 w ramach każdej klasy
+# miejscowości.
+
+
+ggplot(dane) + geom_boxplot(aes(x=klasa,y=d36), fill='Pink') + labs(x='Klasa miejscowości',y='Powierzchnia mieszkania') + ggtitle('Box-plot dla powierzchni w ramach mieszkania') + theme_bw()
+```
+
+```{r}
+ggplot(dane) + geom_boxplot(aes(y=wojewodztwo,x=d36), fill='Pink') + labs(y='Klasa miejscowości',x='Powierzchnia mieszkania') + ggtitle('Box-plot dla powierzchni w ramach mieszkania') + theme_bw()
+```
+
+```{r}
+# Zadanie 7. Stwórz korelacyjny diagram rozrzutu między dochodami a wydatkami
+# a następnie dodaj histogram każdej zmiennej. Podobnie uczyń kolejno z dodaniem
+# wykresów typu box-plot.
+
+wykres <- ggplot(dane %>% filter(wydg > 0 & dochg > 0)) + 
+  geom_point(aes(x=dochg,y=wydg)) + labs(x='Dochód gospodarstwa',y='Wydatki gospodarstwa') + ggtitle('Korelacyjny diagram rozrzutu między dochodami a wydatkami')
+
+ggMarginal(wykres,type='histogram')
+
+ggMarginal(wykres,type='boxplot')
+
+```
+
+```{r}
+# Zadanie 8. Stwórz wykres słupkowy z liczebnościami dla zmiennej klm.
+
+ggplot(dane,aes(x=klasa)) +
+  geom_bar(aes(x=klasa),fill='blue') + 
+  theme_bw()+
+  labs(x='Klasa miejscowości',y='Liczba gospodarstw',title='Rozkład liczby gospodarstw ze względu na klasę miejscowości') + geom_text(stat = 'count', aes(label = after_stat(count)), vjust = -1)
+```
+
+```{r}
+ggplot(dane,aes(x=wojewodztwo)) +
+  geom_bar(aes(x=wojewodztwo),fill='blue') + 
+  theme_bw()+
+  labs(x='Klasa miejscowości',y='Liczba gospodarstw',title='Rozkład liczby gospodarstw ze względu na klasę miejscowości') + geom_text(stat = 'count', aes(label = after_stat(count)), vjust = -1)+ theme(axis.text.x = element_text(angle=90))
+```
+
+```{r}
+#Zadanie 10. Stwórz histogram dla zmiennej wydg.
+
+ggplot(dane) + geom_histogram(aes(x=wydg),col='purple',fill='pink',breaks=seq(0,35000,50)) + theme_bw() + labs(x='Wydatki gospodarstwa',y='Liczba gospodarstw', title = 'Rozkład wydatków')
+```
+
+```{r}
+#Zadanie 11. Stwórz wykres panelowy ukazujący histogramy zmiennej wydg w ramach każdej z klasy miejscowości i wariantu zmiennej d61.
+
+ggplot(dane) + geom_histogram(aes(x=wydg),col='purple',fill='pink',breaks=seq(0,35000,200)) + theme_bw() + labs(x='Wydatki gospodarstwa',y='Liczba gospodarstw', title = 'Rozkład wydatków') + facet_grid(klasa~d61_et)
+
+```
+
+```{r}
+dane$d61_et <- factor(dane$d61,levels = etykiety$kod[58:62],labels = etykiety$Etykieta[58:62])
+```
+
+```{r}
+#Stwórz wykres mapowy(kartogram) pokazujący średnia powierzcnie mieszkan w przekroju województw
+# 1. Wczytujemy plik shp
+wojewodztwa <- st_read('Wojewodztwa')
+#plot(wojewodztwa)
+# 2. Liczymy średnia powierzchnie mieszkan w przekroju województw
+sr_pow <- dane %>% group_by(woj) %>% summarise(srednia=round(mean(d36),1)) %>% rename(JPT_KOD_JE=woj)
+# 3. Łączymy zbiory: wojewodztwa i sr_pow po kluczu (JPT_KOD_JE)
+
+wojewodztwa_all <- left_join(wojewodztwa, sr_pow)
+# 4. Tworzymy kartogram dla zmiennej średnia
+
+tm_shape(wojewodztwa_all) + tm_polygons(col='srednia', border.col = 'pink', title='Średnia \n powierzchnia', breaks=seq(55,80,3)) + tm_layout(legend.outside = TRUE, legend.format = list(text.separator='-')) + tm_text("JPT_NAZWA_", size = 0.6) +
+  tm_shape(wojewodztwa_all)+
+tm_text("srednia", size = 0.6, ymod=-0.5)
+```
